@@ -1,5 +1,6 @@
 class Oystercard
   MAXIMUM_BALANCE = 9000
+  MINIMUM_BALANCE = 100
   attr_reader :balance
   def initialize(balance=0)
     @balance = balance
@@ -7,7 +8,7 @@ class Oystercard
   end
 
   def top_up(amount)
-    if @balance + amount > 9000
+    if @balance + amount > MAXIMUM_BALANCE
       raise "Maximum limit (of £#{MAXIMUM_BALANCE/100}) reached"
     else 
       @balance += amount
@@ -21,9 +22,16 @@ class Oystercard
     @in_use
   end
   def touch_in
-    @in_use = true
+    if minimum_balance_met?
+      @in_use = true
+    else
+      raise "Minimum fare of £1 is required to touch in"
+    end
   end
   def touch_out
     @in_use = false
+  end
+  def minimum_balance_met?
+    @balance >= MINIMUM_BALANCE
   end
 end

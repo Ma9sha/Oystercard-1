@@ -16,23 +16,29 @@ describe Oystercard do
   end
 
   context '#balance=3000' do
+    before {subject.top_up(3000)}
     it '#deduct(200)' do
-      subject.top_up(3000)
       subject.deduct(200)
       expect(subject.balance).to eq (2800)
+    end
+    it '#touch_in' do
+      subject.touch_in
+      expect(subject.in_journey?).to eq(true)
     end
   end
 
   it '#in_journey?' do
     expect(subject.in_journey?).to eq(false)
   end
-  it '#touch_in' do
-    subject.touch_in
-    expect(subject.in_journey?).to eq(true)
-  end
   it '#touch_out' do
     subject.instance_variable_set(:@in_use, true)
     subject.touch_out
     expect(subject.in_journey?).to eq(false)
+  end
+
+  context '#balance=99' do
+    it '#touch_in' do
+      expect{subject.touch_in}.to raise_error("Minimum fare of £1 is required to touch in")
+    end
   end
 end
