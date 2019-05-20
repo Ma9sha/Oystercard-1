@@ -21,6 +21,11 @@ describe Oystercard do
       set_card_use_state(true)
       expect{subject.touch_out}.to change{subject.balance}.by(-200)
     end
+    it 'touch_out' do
+      subject.instance_variable_set(:@entry_station, 'Baker Street')
+      subject.touch_out
+      expect(subject.entry_station).to eq(nil)
+    end
     it '#touch_in' do
       subject.touch_in(entry_station_dbl)
       expect(subject.in_journey?).to eq(true)
