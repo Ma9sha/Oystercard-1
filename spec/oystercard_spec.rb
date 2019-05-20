@@ -6,8 +6,7 @@ describe Oystercard do
   end
 
   it '#top_up(1000)' do
-    subject.top_up(1000)
-    expect(subject.balance).to eq(1000)
+    expect{subject.top_up(1000)}.to change{subject.balance}.by(1000)
   end
 
   let(:maximum) {Oystercard::MAXIMUM_BALANCE}
@@ -18,8 +17,7 @@ describe Oystercard do
   context '#balance=3000' do
     it '#deduct(200)' do
       subject.top_up(3000)
-      subject.deduct(200)
-      expect(subject.balance).to eq (2800)
+      expect{subject.deduct(200)}.to change{subject.balance}.by(-200)
     end
   end
 
