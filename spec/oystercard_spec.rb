@@ -6,8 +6,7 @@ describe Oystercard do
   end
 
   it '#top_up(1000)' do
-    subject.top_up(1000)
-    expect(subject.balance).to eq(1000)
+    expect{subject.top_up(1000)}.to change{subject.balance}.by(1000)
   end
 
   let(:maximum) {Oystercard::MAXIMUM_BALANCE}
@@ -17,9 +16,9 @@ describe Oystercard do
 
   context '#balance=3000' do
     before {subject.top_up(3000)}
-    it '#deduct(200)' do
-      subject.deduct(200)
-      expect(subject.balance).to eq (2800)
+    it '#touch_out' do
+      set_card_use_state(true)
+      expect{subject.touch_out}.to change{subject.balance}.by(-200)
     end
     it '#touch_in' do
       subject.touch_in
@@ -31,7 +30,7 @@ describe Oystercard do
     expect(subject.in_journey?).to eq(false)
   end
   it '#touch_out' do
-    subject.instance_variable_set(:@in_use, true)
+    set_card_use_state(true)
     subject.touch_out
     expect(subject.in_journey?).to eq(false)
   end
@@ -40,5 +39,8 @@ describe Oystercard do
     it '#touch_in' do
       expect{subject.touch_in}.to raise_error("Minimum fare of £1 is required to touch in")
     end
+  end
+  def set_card_use_state(state)
+    subject.instance_variable_set(:@in_use, state)
   end
 end
