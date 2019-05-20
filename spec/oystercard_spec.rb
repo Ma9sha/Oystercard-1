@@ -9,7 +9,7 @@ describe Oystercard do
     subject.top_up(1000)
     expect(subject.balance).to eq(1000)
   end
-  
+
   let(:maximum) {Oystercard::MAXIMUM_BALANCE}
   it '#top_up(10000)' do
     expect{subject.top_up(maximum+1)}.to raise_error("Maximum limit (of £#{maximum/100}) reached")
@@ -23,4 +23,16 @@ describe Oystercard do
     end
   end
 
+  it '#in_journey?' do
+    expect(subject.in_journey?).to eq(false)
+  end
+  it '#touch_in' do
+    subject.touch_in
+    expect(subject.in_journey?).to eq(true)
+  end
+  it '#touch_out' do
+    subject.instance_variable_set(:@in_use, true)
+    subject.touch_out
+    expect(subject.in_journey?).to eq(false)
+  end
 end
