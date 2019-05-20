@@ -15,9 +15,10 @@ describe Oystercard do
   end
 
   context '#balance=3000' do
-    it '#deduct(200)' do
-      subject.top_up(3000)
-      expect{subject.deduct(200)}.to change{subject.balance}.by(-200)
+    before {subject.top_up(3000)}
+    it '#touch_out' do
+      set_card_use_state(true)
+      expect{subject.touch_out}.to change{subject.balance}.by(-200)
     end
   end
 
@@ -29,8 +30,12 @@ describe Oystercard do
     expect(subject.in_journey?).to eq(true)
   end
   it '#touch_out' do
-    subject.instance_variable_set(:@in_use, true)
+    set_card_use_state(true)
     subject.touch_out
     expect(subject.in_journey?).to eq(false)
+  end
+
+  def set_card_use_state(state)
+    subject.instance_variable_set(:@in_use, state)
   end
 end

@@ -20,8 +20,11 @@ class Oystercard
     @in_use = true
   end
   def touch_out
+    this_journey_cost = 200
+    deduct(this_journey_cost)
     @in_use = false
   end
+  private
   def deduct(amount)
     @balance -= amount
   end
