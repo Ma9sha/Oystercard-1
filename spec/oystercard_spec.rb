@@ -1,7 +1,9 @@
 require 'oystercard'
+require 'journey'
 describe Oystercard do
   let (:baker_street_dbl) {double("station", name: "Baker Street")}
   let (:bank_dbl) {double("station", name: "Bank")}
+  MINIMUM_FARE = -Journey::MINIMUM_FARE
   subject { Oystercard.new }
   it '#balance == 0' do
     expect(subject.balance).to eq(0)
@@ -20,7 +22,7 @@ describe Oystercard do
     before {subject.top_up(3000)}
     it '#touch_out' do
       subject.touch_in(baker_street_dbl)
-      expect{subject.touch_out(bank_dbl)}.to change{subject.balance}.by(-200)
+      expect{subject.touch_out(bank_dbl)}.to change{subject.balance}.by(MINIMUM_FARE)
     end
     it 'touch_out' do
       subject.touch_in(baker_street_dbl)
