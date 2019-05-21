@@ -40,7 +40,8 @@ describe Oystercard do
     it '#touch_in + #touch_out -> station history' do
       subject.touch_in(baker_street_dbl)
       subject.touch_out(bank_dbl)
-      expect(subject.history).to include({entry_station: 'Baker Street', exit_station: 'Bank'})
+      journey = subject.history.last
+      expect(journey.entry_station).to eq('Baker Street')
     end
     it '#touch_out' do
       subject.touch_in(baker_street_dbl)
