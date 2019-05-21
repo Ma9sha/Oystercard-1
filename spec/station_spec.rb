@@ -7,7 +7,7 @@ describe Station do
     expect(station.name).to eq("Stratford")
   end
 
-  it 'station name' do
+  it 'station zone' do
     station = Station.new("Stratford", 1)
     expect(station.zone).to eq(1)
   end
