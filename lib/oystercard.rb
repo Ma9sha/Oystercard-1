@@ -15,7 +15,7 @@ class Oystercard
     end
   end
   def in_journey?
-    @entry_station == nil ? false : true
+    !@entry_station.nil?
   end
   def touch_in(station)
     if minimum_balance_met?

@@ -1,6 +1,6 @@
 require 'oystercard'
 describe Oystercard do
-  let (:entry_station_dbl) {double("Entry_station", name: "Baker Street")}
+  let (:entry_station_dbl) {double("Entry_station", name: "Baker Street", in_journey?: false)}
   subject { Oystercard.new }
   it '#balance == 0' do
     expect(subject.balance).to eq(0)
@@ -50,6 +50,7 @@ describe Oystercard do
       expect{subject.touch_in(entry_station_dbl)}.to raise_error("Minimum fare of £1 is required to touch in")
     end
   end
+  
 
   def set_card_use_state(state)
     subject.instance_variable_set(:@in_use, state)
