@@ -19,11 +19,11 @@ describe Oystercard do
   context '#balance=3000' do
     before {subject.top_up(3000)}
     it '#touch_out' do
-      set_card_use_state(true)
+      subject.touch_in(baker_street_dbl)
       expect{subject.touch_out(bank_dbl)}.to change{subject.balance}.by(-200)
     end
     it 'touch_out' do
-      subject.instance_variable_set(:@entry_station, 'Baker Street')
+      subject.touch_in(baker_street_dbl)
       subject.touch_out(bank_dbl)
       expect(subject.entry_station).to eq(nil)
     end
@@ -40,14 +40,14 @@ describe Oystercard do
       subject.touch_out(bank_dbl)
       expect(subject.history).to include({entry_station: 'Baker Street', exit_station: 'Bank'})
     end
+    it '#touch_out' do
+      subject.touch_in(baker_street_dbl)
+      subject.touch_out(bank_dbl)
+      expect(subject.in_journey?).to eq(false)
+    end
   end
 
   it '#in_journey?' do
-    expect(subject.in_journey?).to eq(false)
-  end
-  it '#touch_out' do
-    set_card_use_state(true)
-    subject.touch_out(bank_dbl)
     expect(subject.in_journey?).to eq(false)
   end
 
@@ -55,9 +55,5 @@ describe Oystercard do
     it '#touch_in' do
       expect{subject.touch_in(baker_street_dbl)}.to raise_error("Minimum fare of £1 is required to touch in")
     end
-  end
-
-  def set_card_use_state(state)
-    subject.instance_variable_set(:@in_use, state)
   end
 end
