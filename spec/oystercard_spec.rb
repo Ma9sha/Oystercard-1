@@ -1,10 +1,12 @@
 require 'oystercard'
 require 'journey'
+
 describe Oystercard do
   let (:baker_street_dbl) {double("station", name: "Baker Street")}
   let (:bank_dbl) {double("station", name: "Bank")}
   MINIMUM_FARE = -Journey::MINIMUM_FARE
   subject { Oystercard.new }
+
   it '#balance == 0' do
     expect(subject.balance).to eq(0)
   end
@@ -24,25 +26,28 @@ describe Oystercard do
       subject.touch_in(baker_street_dbl)
       expect{subject.touch_out(bank_dbl)}.to change{subject.balance}.by(MINIMUM_FARE)
     end
-    it 'touch_out' do
-      subject.touch_in(baker_street_dbl)
+    it 'touch_out has a complete journey method' do
+      
+      expect(subject).to respond_to(:complete_journey)
       subject.touch_out(bank_dbl)
-      expect(subject.entry_station).to eq(nil)
     end
-    it '#touch_in' do
+
+    it '#touch_in will change the journey to be true' do
       subject.touch_in(baker_street_dbl)
       expect(subject.in_journey?).to eq(true)
     end
-    it '#touch_in(entry_station)' do
-      subject.touch_in(baker_street_dbl)
-      expect(subject.entry_station).to eq("Baker Street")
-    end
-    it '#touch_in + #touch_out -> station history' do
-      subject.touch_in(baker_street_dbl)
-      subject.touch_out(bank_dbl)
-      journey = subject.history.last
-      expect(journey.entry_station).to eq('Baker Street')
-    end
+
+    # it '#touch_in(entry_station)' do
+    #   subject.touch_in(baker_street_dbl)
+    #   expect(journey_dbl.entry_station).to eq("Baker Street")
+    # end
+
+    # it '#touch_in + #touch_out -> station history' do
+    #   subject.touch_in(baker_street_dbl)
+    #   subject.touch_out(bank_dbl)
+    #   journey = subject.history.last
+    #   expect(journey.entry_station).to eq('Baker Street')
+    # end
     it '#touch_out' do
       subject.touch_in(baker_street_dbl)
       subject.touch_out(bank_dbl)
